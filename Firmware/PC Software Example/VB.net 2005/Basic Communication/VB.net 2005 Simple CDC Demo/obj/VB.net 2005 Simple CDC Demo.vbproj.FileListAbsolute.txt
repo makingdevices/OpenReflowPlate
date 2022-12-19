@@ -1,0 +1,2 @@
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\VB.net 2005 Simple CDC Demo\VB.net 2005 Simple CDC Demo\obj\Debug\VB.net_2005_Simple_CDC_Demo.xml
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\VB.net 2005 Simple CDC Demo\VB.net 2005 Simple CDC Demo\obj\Debug\VB.net 2005 Simple CDC Demo.pdb

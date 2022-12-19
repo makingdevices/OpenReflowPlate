@@ -1,0 +1,16 @@
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Debug\Csharp Simple CDC Demo.exe
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Debug\Csharp Simple CDC Demo.pdb
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\bin\Debug\Csharp Simple CDC Demo.exe
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\bin\Debug\Csharp Simple CDC Demo.pdb
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Debug\ResolveAssemblyReference.cache
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Debug\Csharp_Simple_CDC_Demo.Form1.resources
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Debug\Csharp_Simple_CDC_Demo.Properties.Resources.resources
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Debug\Csharp Simple CDC Demo.csproj.GenerateResource.Cache
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\bin\Release\Csharp Simple CDC Demo.exe
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\bin\Release\Csharp Simple CDC Demo.pdb
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Release\ResolveAssemblyReference.cache
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Release\Csharp_Simple_CDC_Demo.Form1.resources
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Release\Csharp_Simple_CDC_Demo.Properties.Resources.resources
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Release\Csharp Simple CDC Demo.csproj.GenerateResource.Cache
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Release\Csharp Simple CDC Demo.exe
+C:\Documents and Settings\David\My Documents\Visual Studio 2005\Projects\Csharp Simple CDC Demo\Csharp Simple CDC Demo\obj\Release\Csharp Simple CDC Demo.pdb

@@ -1,0 +1,16 @@
+obj\Debug\Csharp Simple CDC Demo.exe
+obj\Debug\Csharp Simple CDC Demo.pdb
+bin\Debug\Csharp Simple CDC Demo.exe
+bin\Debug\Csharp Simple CDC Demo.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Csharp_Simple_CDC_Demo.Form1.resources
+obj\Debug\Csharp_Simple_CDC_Demo.Properties.Resources.resources
+obj\Debug\Csharp Simple CDC Demo.csproj.GenerateResource.Cache
+bin\Release\Csharp Simple CDC Demo.exe
+bin\Release\Csharp Simple CDC Demo.pdb
+obj\Release\ResolveAssemblyReference.cache
+obj\Release\Csharp_Simple_CDC_Demo.Form1.resources
+obj\Release\Csharp_Simple_CDC_Demo.Properties.Resources.resources
+obj\Release\Csharp Simple CDC Demo.csproj.GenerateResource.Cache
+obj\Release\Csharp Simple CDC Demo.exe
+obj\Release\Csharp Simple CDC Demo.pdb
