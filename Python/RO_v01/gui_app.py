@@ -86,7 +86,7 @@ def bin2tempext(binary, binary2):
 # -------------------------
 event = '_IDLE_'
 Loop_number = 0
-out_setpoint = 180
+out_setpoint = 25
 out_status = 0
 tc1_internal = 0
 tc1_external = 0
@@ -96,8 +96,11 @@ tic = 0
 toc = 0
 tic_sample = 0
 toc_sample = 0
-com_port = "COM9"
+comport = ""
 connection_avail = 0
+init_time = 0
+new_cycle = 0
+cycle_time = 0
 device = serial.Serial()
 
 ## ---------------------------
@@ -198,10 +201,14 @@ class MyMainWindow(QMainWindow):
        
     def __init__(self):
         super().__init__()
+        global init_time
 
         uic.loadUi("gui_app.ui", self)
+        init_time = time.perf_counter()
         self.tc1_graph.stateChanged.connect(self.graph1_activation_checkbox) # CheckBox para la grafica. Excepción cuando cambia de estado.
         self.com_port_bt.clicked.connect(self.fn_com_port_bt)
+        self.pb_fixsetpoint.clicked.connect(self.fn_pb_fixsetpoint)
+        self.pb_start_cycle.clicked.connect(self.fn_pb_start_cycle)
 
         self.graph1_activation = 0  #Variable para saber si la grafica está activada o no.
 
@@ -216,13 +223,25 @@ class MyMainWindow(QMainWindow):
         self.timer1_start()   #Inicio el timer
         self.update_gui()     #Actualizo la GUI
 
+    def fn_pb_fixsetpoint(self):
+        global out_setpoint
+        print("Fix new setpoint!")
+        out_setpoint = self.SB_setpoint.value()
+
+    def fn_pb_start_cycle(self):
+        global new_cycle, cycle_time
+        print("Startint Reflow Curve")
+        new_cycle = 1
+        cycle_time = time.perf_counter()
+
     def fn_com_port_bt(self):
-        global connection_avail, device
+        global connection_avail, device, comport
         if(connection_avail == 0):
             self.com_port_bt.setText("Disconnect!")
             com_port = self.com_port_usb.currentText()
             print(com_port)
-            device = serial.Serial(port=com_port, baudrate=115200, timeout=0.001, write_timeout=0.001)
+            comport = com_port
+            device = serial.Serial(port=comport, baudrate=115200, timeout=0.001, write_timeout=0.001)
             connection_avail = 1
             return
 
@@ -249,7 +268,7 @@ class MyMainWindow(QMainWindow):
         if state == QtCore.Qt.Checked:  #Si está check
             # make a new figure
             self.fig, self.ax = plt.subplots()            #Creamos nueva ventana de gráfica
-            self.ax.set_ylim(0,100)                  #Eje Y de 0 a 200
+            self.ax.set_ylim(0,230)                  #Eje Y de 0 a 200
             self.ax.set_xlim(0, x_axis)                #Eje X de 0 a 1000
             #self.ax.get_xaxis().set_animated(True)
             self.ax.set_title("Temperature Plot")   #Titulo grafica
@@ -266,42 +285,58 @@ class MyMainWindow(QMainWindow):
         else:
             self.graph1_activation = 0  #Cambiamos la variable de la grafica a desactivada
 
-    def update_gui(self):  #Funcion que actualiza la GUI de forma automatica (SIN NECESIDAD DE INTERACTUAR CON EL HUMANO)
-        global COMS, tc1_internal,tc1_external, x_axis, interrupt_data,out_setpoint,out_status,tic_sample,toc_sample
+    def update_gui(self):  #Update function for the GUI (Without human interaction)
+        global COMS, tc1_internal,tc1_external, x_axis, interrupt_data,out_setpoint,out_status,tic_sample,toc_sample, init_time, new_cycle, cycle_time
         self.update_COM()
         tic_sample = time.perf_counter()
         if(interrupt_data == 1):
-            self.xdata_1.append(self.xdata_1[-1] + 1)  #We load the new data
+            self.xdata_1.append(tic_sample - init_time)  #We load the new data
             self.ydata_1.append(tc1_internal)         
             self.ydata_2.append(tc1_external)
             self.ydata_3.append(out_setpoint)
             self.ydata_4.append(out_status)
             interrupt_data = 0
             print(f"Sampling time {tic_sample - toc_sample:0.4f} seconds")
+            print(f"Whole time {tic_sample - init_time:0.4f} seconds")
             toc_sample = time.perf_counter()
             self.tc1_status.setText("Working")
             self.tc1_int_temperature.setText(str(tc1_internal))           #print internal Temp
             self.tc1_ext_temperature.setText(str(tc1_external))           #print external Temp
-            self.tc2_status.setText("Working")
-            self.tc2_int_temperature.setText(str(out_setpoint))           #print internal Temp
-            if(out_status==0x01): self.tc2_ext_temperature.setText("OFF") 
-            if(out_status==0x03): self.tc2_ext_temperature.setText("ON")
 
-        if (self.graph1_activation == 1):                  #Si la grafica está activada...
+            if(out_status==0x01): self.tc2_status.setText("OFF") 
+            if(out_status==0x03): self.tc2_status.setText("ON")
+
+        if (new_cycle == 1):  
+            reflow_time = (time.perf_counter() - cycle_time)
+            print(reflow_time)
+            if(reflow_time > 300):  #Time to go zero
+                out_setpoint = 0
+            elif(reflow_time > 240):  #Time to cool down
+                out_setpoint = (-210/60)*(reflow_time-240) + 210
+            elif(reflow_time > 210): #Step 4 - Finishing soldering up to 210º
+                out_setpoint = (((210-165)/30)*(reflow_time-210)) + 165
+            elif(reflow_time > 180): #Step 3 up to 165º
+                out_setpoint = (((165-138)/30)*(reflow_time-180)) + 138
+            elif(reflow_time > 90): # Step 2 up to 138º
+                out_setpoint = (((138-90)/90)*(reflow_time-90)) + 90
+            else: #Init heat up - step 1 up to 90º
+                out_setpoint = (((90-25)/90)*reflow_time) + 25
+
+        if (self.graph1_activation == 1):                  #If the graph is activated...
             self.ln.set_xdata(self.xdata_1)
-            self.ln.set_ydata(self.ydata_1)                #Cargamos los nuevos valores de Y a la linea.
+            self.ln.set_ydata(self.ydata_1)                #We load the new data into Y axis of the line.
             self.ln_2.set_xdata(self.xdata_1)
-            self.ln_2.set_ydata(self.ydata_2)                #Cargamos los nuevos valores de Y a la linea.
+            self.ln_2.set_ydata(self.ydata_2)                #Same.
             self.ln_3.set_xdata(self.xdata_1)
             self.ln_3.set_ydata(self.ydata_3)
             self.ln_4.set_xdata(self.xdata_1)
-            self.ln_4.set_ydata(self.ydata_4)                #Cargamos los nuevos valores de Y a la linea.
+            self.ln_4.set_ydata(self.ydata_4)                #Same.
             if(self.xdata_1[-1] + 20 > x_axis):
                 x_axis = x_axis + 100
                 self.ax.set_xlim(0, x_axis)
                 self.fig.canvas.resize_event()
                     # tell the blitting manager to do its thing
-            self.bm.update()                               #Y que la clase BlitManager se encargue de graficar.
+            self.bm.update()                               #BlitManager class update the graphs and do everything
             self.fig.canvas.mpl_connect('close_event', self.handle_close)
 
     def handle_close(self, evt):
@@ -309,46 +344,47 @@ class MyMainWindow(QMainWindow):
         print('Closed Figure')
     def timer1_start(self):  #TIMER
         self.timer1 = QtCore.QTimer(self)
-        self.timer1.timeout.connect(self.timer1_timeout) #Se ejecuta esta funcion cuando el tiempo se agota
+        self.timer1.timeout.connect(self.timer1_timeout) #It launchs timer1_timeout when the time is over
         self.timer1.start(25) #50ms
 
-    def timer1_timeout(self): #Cuando el tiempo se agota, ejecuto update_gui.
-        self.update_gui() #OJO!, es "self" por que si no, no podria acceder a la GUI
+    def timer1_timeout(self): #When the time is over, I execute update_GUI
+        self.update_gui() #Watch out!, it must be "self" for accesing the GUI
 
-class AThread(QThread):  #Thread en paralelo a la actualizacion del GUI
+class AThread(QThread):  #Thread in parallel from the GUI
     def run(self):
         while True:
             time.sleep(0.01)
-            Event_Task()  #Lanzamos funcion Event_Task cada 10ms EN PARALELO.
+            Event_Task()  #We repeat the parallel function every 10 ms
 
 def Event_Task():
-    global COMS,Loop_number, interrupt_data, tc1_external, tc1_internal, out_status, out_setpoint, tic, toc, connection_avail 
+    global COMS,Loop_number, interrupt_data, tc1_external, tc1_internal, out_status, out_setpoint, init_time, tic, toc, connection_avail, device
     if(Loop_number > 3):
         COMS = serial_ports()
         Loop_number = 0
     toc = time.perf_counter()
-    if((toc-tic)>=0.15):
+    if((toc-tic)>=0.2):
         Loop_number += 0.15
         tic = time.perf_counter()
         if(connection_avail == 1):
             try:
+                if(device == None):
+                    device = serial.Serial(port=comport, baudrate=115200, timeout=0.001, write_timeout=0.001)
                 if(out_setpoint > tc1_external):
                     device.write('1'.encode('utf-8'))
                 else:
                     device.write('0'.encode('utf-8')) 
-
                 raw_string_b = device.readline()
                 tc1_internal= bin2tempint(raw_string_b[4],raw_string_b[3])
                 tc1_external = bin2tempext(raw_string_b[2],raw_string_b[1])
                 out_status = raw_string_b[5]
+                if(device!= None):device.close()
+                device = None
                 interrupt_data = 1
             except:
                 print("Exception occurred, somthing wrong...")
-                connection_avail = 0
-            
-
-        
-
+                if(device!= None):device.close()
+                device = None
+                print("Trying to reconnect...")
 
 # -----------------
 #   MAIN PROGRAM
