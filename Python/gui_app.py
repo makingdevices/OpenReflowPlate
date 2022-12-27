@@ -1,5 +1,5 @@
-### Reflow Oven
-## Ruben Garcia Segovia - 2022
+### Reflow Oven prototype software
+## Making Devices - Q4 2022 
 #
 
 import sys, time
