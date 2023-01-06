@@ -70,7 +70,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Bytes Counter Shot][product-screenshot]](https://makingdevices.com/TCLogger-Device)
+[![Bytes Counter Shot][product-screenshot]](https://github.com/makingdevices/OpenReflowPlate)
 
 OpenReflowPlate wants to be a complete controller where you can attach to it any heat plate and create a reflowplate for SMD components and PCBs. Right now, it is in prototype stage as I do not even have a PCB layout, just testing the capabilities with an expansion board from my Thermo-Logger-Device project. The microcontroller will be the PIC18F45k50.
 
