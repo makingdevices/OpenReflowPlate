@@ -177,7 +177,7 @@ PCBWay is the most professional PCB manufacturer for prototyping and low-volume 
 [sponsor-url]: https://www.pcbway.com/?from=makingdevices
 [sponsor-screenshot]: /images/PCB_sponsor.png
 [product-screenshot]: images/screenshot.jpg
-[PIC]: https://img.shields.io/badge/PIC18LF14K50-000000?style=for-the-badge
+[PIC]: https://img.shields.io/badge/PIC18LF45K50-000000?style=for-the-badge
 [PIC-url]: http://ww1.microchip.com/downloads/en/devicedoc/40001350f.pdf
 [kicad-shield]: https://img.shields.io/badge/kicad-0b03fc?style=for-the-badge&logo=kicad&logoColor=white
 [kicad-url]: https://www.kicad.org/
