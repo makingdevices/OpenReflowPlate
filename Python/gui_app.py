@@ -8,6 +8,7 @@ from PyQt5.QtCore import QThread
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QMainWindow, QApplication
 import serial.tools.list_ports
+from simple_pid import PID
 
 import serial, time
 
@@ -102,7 +103,11 @@ init_time = 0
 new_cycle = 0
 cycle_time = 0
 device = serial.Serial()
-
+start_time = 0
+pid = PID(18, 1.6, 30, setpoint=out_setpoint)
+last_time = 0
+power = 0
+windowStartTime = 0
 ## ---------------------------
 ##  GRAPH CLASS & RELATED DEFINITIONS
 ## ---------------------------
@@ -202,9 +207,12 @@ class MyMainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         global init_time
+        global out_setpoint
+        global pid,last_time
 
         uic.loadUi("gui_app.ui", self)
         init_time = time.perf_counter()
+        last_time = init_time
         self.tc1_graph.stateChanged.connect(self.graph1_activation_checkbox) # CheckBox para la grafica. Excepción cuando cambia de estado.
         self.com_port_bt.clicked.connect(self.fn_com_port_bt)
         self.pb_fixsetpoint.clicked.connect(self.fn_pb_fixsetpoint)
@@ -220,8 +228,18 @@ class MyMainWindow(QMainWindow):
         self.ydata_3 = [0] # Out_setpoint
         self.ydata_4 = [0] # Out_Enable
 
+        pid.output_limits = (0, 5000)
+
         self.timer1_start()   #Inicio el timer
         self.update_gui()     #Actualizo la GUI
+
+    def PID_control(self):
+        global init_time,tc1_external,out_setpoint,pid,last_time,power
+        power = pid(tc1_external)
+        print("Sensor: "+str(tc1_external))
+        print("PID answer: "+ str(power))
+        print("Setpoint: "+str(self.ydata_3[-1]))
+        pid.setpoint = out_setpoint
 
     def fn_pb_fixsetpoint(self):
         global out_setpoint
@@ -349,6 +367,7 @@ class MyMainWindow(QMainWindow):
 
     def timer1_timeout(self): #When the time is over, I execute update_GUI
         self.update_gui() #Watch out!, it must be "self" for accesing the GUI
+        self.PID_control()
 
 class AThread(QThread):  #Thread in parallel from the GUI
     def run(self):
@@ -357,7 +376,7 @@ class AThread(QThread):  #Thread in parallel from the GUI
             Event_Task()  #We repeat the parallel function every 10 ms
 
 def Event_Task():
-    global COMS,Loop_number, interrupt_data, tc1_external, tc1_internal, out_status, out_setpoint, init_time, tic, toc, connection_avail, device
+    global COMS,Loop_number, interrupt_data, tc1_external, tc1_internal, out_status, out_setpoint, init_time, tic, toc, connection_avail, device, power,windowStartTime
     if(Loop_number > 3):
         COMS = serial_ports()
         Loop_number = 0
@@ -369,10 +388,20 @@ def Event_Task():
             try:
                 if(device == None):
                     device = serial.Serial(port=comport, baudrate=115200, timeout=0.001, write_timeout=0.001)
-                if(out_setpoint > tc1_external):
+
+
+                if(tic*1000 - windowStartTime > 5000):
+                    windowStartTime = tic*1000
+                #Time in milliseconds (*1000)
+                if(power > tic*1000 - windowStartTime):
                     device.write('1'.encode('utf-8'))
                 else:
                     device.write('0'.encode('utf-8')) 
+
+                #if(power > 20):  #out_setpoint > tc1_external
+                #    device.write('1'.encode('utf-8'))
+                #else:
+                #    device.write('0'.encode('utf-8')) 
                 raw_string_b = device.readline()
                 tc1_internal= bin2tempint(raw_string_b[4],raw_string_b[3])
                 tc1_external = bin2tempext(raw_string_b[2],raw_string_b[1])
