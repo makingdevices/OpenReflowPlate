@@ -153,8 +153,8 @@ Other Links: [LinkTree](https://makingdevices.com/links/)
 
 [PCBWAY](https://www.pcbway.com/?from=makingdevices) is the most professional PCB manufacturer for prototyping and low-volume production to work with in the world. With more than a decade in the field, They are committed to meeting the needs of their customers from different industries in terms of quality, delivery, cost-effectiveness and any other demanding requests. As Sponsor of Making Devices, they will be in charge of all the PCBs for MDV, allowing both of us to grow together in a long term partnership. We hope you take them into account for your both personal and professional prototypes or products.
 
-[![Sponsor Shot][sponsor-pcb-1]][sponsor-url]
-[![Sponsor Shot][sponsor-pcb-2]][sponsor-url]
+[![PCB Shot 1][pcb_pic1]](https://www.pcbway.com/?from=makingdevices)
+[![PCB Shot 2][pcb_pic2]](https://www.pcbway.com/?from=makingdevices)
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
