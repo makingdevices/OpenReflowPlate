@@ -352,7 +352,7 @@ class MyMainWindow(QMainWindow):
             if(self.xdata_1[-1] + 20 > x_axis):
                 x_axis = x_axis + 100
                 self.ax.set_xlim(0, x_axis)
-                self.fig.canvas.resize_event()
+                #self.fig.canvas.resizeEvent()
                     # tell the blitting manager to do its thing
             self.bm.update()                               #BlitManager class update the graphs and do everything
             self.fig.canvas.mpl_connect('close_event', self.handle_close)
