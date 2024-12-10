@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "OpenReflowPlate-rescue")(type "KiCad")(uri "${KIPRJMOD}/OpenReflowPlate-rescue.kicad_sym")(options "")(descr ""))
   (lib (name "B2B-XH-A")(type "KiCad")(uri "D:/SamacSys_PCB_Library/KiCad/B2B-XH-A.kicad_sym")(options "")(descr ""))
+  (lib (name "usb-type-c")(type "KiCad")(uri "D:/SamacSys_PCB_Library_3.0/snapeda/USB-typec-629722000214/629722000214.kicad_sym")(options "")(descr ""))
 )

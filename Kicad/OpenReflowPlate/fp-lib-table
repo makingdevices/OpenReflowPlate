@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "usb-c")(type "KiCad")(uri "D:/SamacSys_PCB_Library_3.0/snapeda/USB-typec-629722000214")(options "")(descr ""))
+)
